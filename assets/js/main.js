@@ -35,14 +35,18 @@ imgs.beta.src = "assets/img/fish_beta.png";
 imgs.globo.src = "assets/img/fish_pez_globo.png";
 imgs.tiburon.src = "assets/img/fish_linterna.png";
 
-// 🐟 PEZ
+// 🐟 PEZ (zigzag hacia arriba)
 class Pez {
   constructor(tipo) {
     this.tipo = tipo;
-    this.x = -50;
-    this.y = Math.random() * canvas.height;
+    this.x = Math.random() * canvas.width;
+    this.y = canvas.height + 50; // salen desde abajo
     this.size = 40;
-    this.speed = Math.random() * 2 + nivel * 0.5;
+
+    this.speedY = Math.random() * 2 + 1 + nivel * 0.3;
+    this.speedX = Math.random() * 2 - 1;
+
+    this.angle = 0;
   }
 
   draw() {
@@ -50,12 +54,17 @@ class Pez {
   }
 
   update() {
-    this.x += this.speed;
+    this.y -= this.speedY;
+
+    // zig-zag
+    this.angle += 0.1;
+    this.x += Math.sin(this.angle) * 2 + this.speedX;
+
     this.draw();
   }
 }
 
-// 💥 PARTICULAS (explosión)
+// 💥 PARTÍCULAS
 class Particula {
   constructor(x, y) {
     this.x = x;
@@ -108,17 +117,12 @@ class Depredador {
         this.y < pez.y + pez.size &&
         this.y + this.size > pez.y
       ) {
-        // 💥 partículas
         for (let j = 0; j < 10; j++) {
           particulas.push(new Particula(pez.x, pez.y));
         }
 
         peces.splice(i, 1);
-
         puntos += 1;
-
-        // 🦈 crecer
-        this.size += 2;
       }
     });
   }
@@ -131,7 +135,7 @@ canvas.addEventListener("mousemove", (e) => {
   depredador.y = e.clientY - rect.top - depredador.size / 2;
 });
 
-// 🐟 SPAWN CONTINUO
+// 🐟 SPAWN
 function spawnPez() {
   const tipos = ["azul", "dorado", "beta", "globo"];
   const tipo = tipos[Math.floor(Math.random() * tipos.length)];
@@ -145,10 +149,7 @@ function iniciarTimer() {
 
     tiempo--;
 
-    // subir nivel progresivo
-    if (tiempo % 10 === 0) {
-      nivel++;
-    }
+    if (tiempo % 10 === 0) nivel++;
 
     if (tiempo <= 0 || vidas <= 0) {
       juegoActivo = false;
@@ -160,13 +161,12 @@ function iniciarTimer() {
   }, 1000);
 }
 
-// 🐟 GENERADOR AUTOMÁTICO
+// 🐟 SPAWN CONTINUO
 function iniciarSpawn() {
   setInterval(() => {
     if (!juegoActivo) return;
-
     spawnPez();
-  }, 800 - nivel * 50); // más rápido por nivel
+  }, Math.max(300, 800 - nivel * 50));
 }
 
 // UI
@@ -183,7 +183,15 @@ function animate() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  peces.forEach(p => p.update());
+  peces.forEach((p, i) => {
+    p.update();
+
+    // 💀 si se escapa
+    if (p.y + p.size < 0) {
+      peces.splice(i, 1);
+      vidas--;
+    }
+  });
 
   particulas = particulas.filter(p => p.life > 0);
   particulas.forEach(p => p.update());
