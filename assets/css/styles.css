@@ -1,53 +1,76 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: url("../img/fondo_arrecife.png") no-repeat center/cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Fredoka', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.container {
-  text-align: center;
-  backdrop-filter: blur(15px);
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 20px;
-  width: 850px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+.fondo-pantalla {
+    position: absolute; width: 100%; height: 100%;
+    object-fit: cover; z-index: -2;
 }
 
-h1 {
-  color: white;
+#burbujas {
+    position: absolute; top: 0; left: 0; z-index: -1;
 }
 
-.stats {
-  display: flex;
-  justify-content: space-around;
-  margin: 10px 0;
-  color: white;
-  font-weight: bold;
+/* EL CUADRO DE CRISTAL (Glassmorphism) */
+.game-container {
+    width: 80%; height: 80%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    position: relative;
 }
 
-canvas {
-  background: rgba(0,0,50,0.3);
-  border-radius: 15px;
-  margin-top: 10px;
+.ui-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-button {
-  margin-top: 15px;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 10px;
-  background: #00c3ff;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
+.game-area {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
 }
 
-button:hover {
-  background: #008cff;
+#gameCanvas {
+    width: 100%; height: 100%;
 }
+
+/* Pantalla de inicio sobre el juego */
+.overlay {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 50, 100, 0.4);
+    color: white;
+    border-radius: 0 0 20px 20px;
+}
+
+.btn-principal {
+    padding: 15px 50px;
+    font-size: 24px;
+    background: #00d2ff;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #008eb0;
+}
+
+.btn-principal:active { transform: translateY(3px); box-shadow: none; }
