@@ -1,91 +1,128 @@
-const canvas = document.getElementById("burbujas");
-const ctx = canvas.getContext("2d");
+const bCanvas = document.getElementById("burbujas");
+const bCtx = bCanvas.getContext("2d");
+const gCanvas = document.getElementById("gameCanvas");
+const gCtx = gCanvas.getContext("2d");
+
+let juegoActivo = false;
+let puntos = 0, vidas = 3, tiempo = 50, nivel = 1;
+let burbujas = [], pecesJuego = [];
+
+// Imágenes
+const imgS = {
+    azul: new Image(), dorado: new Image(), beta: new Image(),
+    globo: new Image(), linterna: new Image()
+};
+imgS.azul.src = "assets/img/azul.png";
+imgS.dorado.src = "assets/img/dorado.png";
+imgS.beta.src = "assets/img/beta.png";
+imgS.globo.src = "assets/img/globo.png";
+imgS.linterna.src = "assets/img/linterna.png";
+
+const depredador = { x: 0, y: 0 };
 
 function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    bCanvas.width = window.innerWidth;
+    bCanvas.height = window.innerHeight;
+    if (juegoActivo) {
+        // Ajustamos el canvas interno al contenedor de cristal
+        gCanvas.width = gCanvas.parentElement.clientWidth;
+        gCanvas.height = gCanvas.parentElement.clientHeight;
+    }
 }
 window.addEventListener("resize", resize);
 resize();
 
+// Clase Burbuja Realista
 class Burbuja {
-    constructor(isInitial = false) {
-        this.isInitial = isInitial; // Para saber si es la carga inicial
-        this.init();
+    constructor(initAll) {
+        this.size = Math.random() * 20 + 15;
+        this.x = Math.random() * bCanvas.width;
+        this.y = initAll ? Math.random() * bCanvas.height : bCanvas.height + 50;
+        this.speed = Math.random() * 1 + 0.5;
     }
-
-    init() {
-        this.x = Math.random() * canvas.width;
-        
-        // Si es el inicio, las esparcimos por toda la pantalla. 
-        // Si no, las hacemos nacer desde abajo.
-        if (this.isInitial) {
-            this.y = Math.random() * canvas.height;
-            this.isInitial = false; // Solo se usa una vez
-        } else {
-            this.y = canvas.height + Math.random() * 200;
-        }
-
-        // TAMAÑO MEDIANO: Radio entre 15 y 35
-        this.size = Math.random() * 20 + 15; 
-        
-        this.speedY = Math.random() * 1 + 0.5;
-        this.oscilacion = Math.random() * 0.02;
-        this.angulo = Math.random() * Math.PI * 2;
-    }
-
-    update() {
-        this.y -= this.speedY;
-        this.angulo += this.oscilacion;
-        this.x += Math.sin(this.angulo) * 0.5;
-
-        // Si sale por arriba, reinicia abajo
-        if (this.y < -this.size * 2) {
-            this.init();
-        }
-    }
-
     draw() {
-        ctx.save();
-        
-        let gradient = ctx.createRadialGradient(
-            this.x - this.size * 0.2, this.y - this.size * 0.2, this.size * 0.1, 
-            this.x, this.y, this.size
-        );
-
-        gradient.addColorStop(0, "rgba(255, 255, 255, 0.8)"); 
-        gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.05)"); 
-        gradient.addColorStop(0.9, "rgba(200, 230, 255, 0.3)"); 
-        gradient.addColorStop(1, "rgba(255, 255, 255, 0.4)");
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Reflejo brillante
-        ctx.beginPath();
-        ctx.arc(this.x - this.size * 0.4, this.y - this.size * 0.4, this.size * 0.15, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-        ctx.fill();
-
-        ctx.restore();
+        this.y -= this.speed;
+        if (this.y < -50) this.y = bCanvas.height + 50;
+        bCtx.save();
+        let grad = bCtx.createRadialGradient(this.x-this.size*0.2, this.y-this.size*0.2, this.size*0.1, this.x, this.y, this.size);
+        grad.addColorStop(0, "rgba(255, 255, 255, 0.8)");
+        grad.addColorStop(0.4, "rgba(255, 255, 255, 0.05)");
+        grad.addColorStop(1, "rgba(255, 255, 255, 0.4)");
+        bCtx.fillStyle = grad;
+        bCtx.beginPath(); bCtx.arc(this.x, this.y, this.size, 0, Math.PI*2); bCtx.fill();
+        bCtx.restore();
     }
 }
 
-let burbujas = [];
-// Aumentamos a 30 para que se vea más poblado al ser medianas
-for (let i = 0; i < 30; i++) {
-    burbujas.push(new Burbuja(true)); // Enviamos true para que aparezcan en toda la pantalla al cargar
+for (let i = 0; i < 30; i++) burbujas.push(new Burbuja(true));
+
+// Lógica de cambio de pantalla
+document.getElementById("btn-jugar").addEventListener("click", () => {
+    document.getElementById("menu-inicio").style.display = "none"; // Oculta TODO el inicio
+    document.getElementById("game-container").style.display = "flex"; // Muestra el cuadro de juego
+    juegoActivo = true;
+    resize();
+    iniciarContador();
+});
+
+gCanvas.addEventListener("mousemove", (e) => {
+    const rect = gCanvas.getBoundingClientRect();
+    depredador.x = e.clientX - rect.left;
+    depredador.y = e.clientY - rect.top;
+});
+
+function iniciarContador() {
+    const timer = setInterval(() => {
+        if (!juegoActivo) { clearInterval(timer); return; }
+        tiempo--;
+        if (tiempo <= 0 || vidas <= 0) {
+            juegoActivo = false;
+            alert(`Fin del Juego. Puntos: ${puntos}`);
+            location.reload();
+        }
+    }, 1000);
 }
 
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    burbujas.forEach(b => {
-        b.update();
-        b.draw();
-    });
-    requestAnimationFrame(animate);
-}
+function loop() {
+    bCtx.clearRect(0, 0, bCanvas.width, bCanvas.height);
+    burbujas.forEach(b => b.draw());
 
-animate();
+    if (juegoActivo) {
+        gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
+        
+        // Dibujar depredador (Pez Linterna)
+        gCtx.drawImage(imgS.linterna, depredador.x - 40, depredador.y - 40, 80, 80);
+
+        // Generar peces comida
+        if (Math.random() < 0.03) {
+            const t = ["azul", "dorado", "beta", "globo"];
+            pecesJuego.push({
+                x: Math.random() * (gCanvas.width - 40),
+                y: gCanvas.height + 40,
+                tipo: t[Math.floor(Math.random() * 4)],
+                speed: 1.5 + (nivel * 0.3)
+            });
+        }
+
+        pecesJuego.forEach((p, i) => {
+            p.y -= p.speed;
+            gCtx.drawImage(imgS[p.tipo], p.x, p.y, 45, 45);
+            
+            // Colisión
+            let d = Math.hypot(depredador.x - (p.x + 22), depredador.y - (p.y + 22));
+            if (d < 45) {
+                if (p.tipo === "globo") vidas--;
+                else puntos += 10;
+                pecesJuego.splice(i, 1);
+            }
+        });
+
+        // UI
+        document.getElementById("puntos").innerText = puntos;
+        document.getElementById("vidas").innerText = vidas;
+        document.getElementById("tiempo").innerText = tiempo;
+        document.getElementById("nivel").innerText = nivel;
+    }
+    requestAnimationFrame(loop);
+}
+loop();

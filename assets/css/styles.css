@@ -1,42 +1,154 @@
+/* --- RESET Y CONFIGURACIÓN BASE --- */
 body, html {
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Evita que aparezcan barras de scroll por peces gigantes */
     font-family: 'Fredoka', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #008eb0;
 }
 
-.fondo-pantalla {
-    position: absolute; width: 100%; height: 100%;
-    object-fit: cover; z-index: -2;
+/* --- FONDO DEL MAR --- */
+.fondo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* Clave: ajusta la imagen al hueco sin deformarla */
+    z-index: 0;
 }
 
+/* --- BURBUJAS DE FONDO --- */
 #burbujas {
-    position: absolute; top: 0; left: 0; z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
 }
 
-/* EL CUADRO DE CRISTAL (Glassmorphism) */
-.game-container {
-    width: 80%; height: 80%;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 20px;
+/* --- PANTALLA DE INICIO (Imagen 1) --- */
+.menu {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center;     /* Centra verticalmente */
+    z-index: 10;
+    transition: opacity 0.5s ease;
+}
+
+.ui-content {
+    position: relative;
+    z-index: 11;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    align-items: center;
+    text-align: center;
+}
+
+/* TÍTULO CON BORDE BLANCO (ESTILO STICKER) */
+.logo-texto {
+    font-size: clamp(50px, 8vw, 90px); /* Tamaño responsivo */
+    margin: 0;
+    color: #4da6ff;
+    -webkit-text-stroke: 12px white; /* El borde grueso de tu foto */
+    paint-order: stroke fill;
+    text-shadow: 0 10px 0px rgba(0,0,0,0.15);
+    line-height: 1;
+}
+
+.subtitulo {
+    color: white;
+    font-weight: 600;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 10px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+}
+
+/* --- BOTÓN 3D AZUL --- */
+button {
+    margin-top: 30px;
+    padding: 18px 60px;
+    font-size: 26px;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(to bottom, #00d2ff, #3a7bd5);
+    border: 4px solid white;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 0px #255a9e, 0 15px 25px rgba(0,0,0,0.3);
+    transition: all 0.1s ease;
+    outline: none;
+}
+
+button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 0px #255a9e;
+}
+
+/* --- PECES DECORATIVOS (Evita el pez gigante) --- */
+.pez {
+    position: absolute;
+    z-index: 2;
+    max-width: 150px; /* Tamaño máximo para que no se vea gigante */
+    height: auto;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+    image-rendering: -webkit-optimize-contrast; /* Mejora la nitidez */
+}
+
+/* Posiciones exactas basadas en tu diseño */
+.pez-dorado  { width: 140px; top: 15%; left: 8%; transform: rotate(10deg); }
+.pez-azul    { width: 130px; top: 45%; left: 15%; transform: scaleX(-1); }
+.pez-beta    { width: 120px; top: 25%; right: 12%; }
+.pez-pulpo   { width: 110px; top: 12%; right: 35%; }
+.pez-globo   { width: 100px; bottom: 15%; left: 10%; }
+.pez-tortuga { width: 150px; bottom: 20%; right: 8%; transform: rotate(-5deg); }
+
+/* --- CONTENEDOR DE JUEGO (Glassmorphism - Imagen 2) --- */
+.game-container {
     position: relative;
+    width: 85%;
+    height: 80%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px); /* El efecto de desenfoque de cristal */
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    display: none; /* JS lo activa al pulsar JUGAR */
+    flex-direction: column;
+    z-index: 5;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
 }
 
 .ui-header {
-    padding: 20px;
+    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: white;
+    background: rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px 30px 0 0;
+}
+
+.stats span {
+    margin-left: 20px;
+    font-weight: bold;
 }
 
 .game-area {
@@ -46,31 +158,7 @@ body, html {
 }
 
 #gameCanvas {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
+    cursor: none; /* Oculta el mouse para usar el pez linterna */
 }
-
-/* Pantalla de inicio sobre el juego */
-.overlay {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 50, 100, 0.4);
-    color: white;
-    border-radius: 0 0 20px 20px;
-}
-
-.btn-principal {
-    padding: 15px 50px;
-    font-size: 24px;
-    background: #00d2ff;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 5px 0 #008eb0;
-}
-
-.btn-principal:active { transform: translateY(3px); box-shadow: none; }

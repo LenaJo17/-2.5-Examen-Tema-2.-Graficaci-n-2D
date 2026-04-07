@@ -8,29 +8,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <img src="assets/img/fondo_arrecife.png" class="fondo-pantalla">
+    <img src="assets/img/fondo_arrecife.png" class="fondo">
     <canvas id="burbujas"></canvas>
 
-    <div class="game-container">
+    <div class="menu" id="menu-inicio">
+        <div class="ui-content">
+            <h1 class="logo-texto">Fish Catcher</h1>
+            <p class="subtitulo">Relaxing Ocean Adventure</p>
+            <button id="btn-jugar">¡JUGAR!</button>
+        </div>
+
+        <img src="assets/img/dorado.png" class="pez pez-dorado">
+        <img src="assets/img/azul.png" class="pez pez-azul">
+        <img src="assets/img/beta.png" class="pez pez-beta">
+        <img src="assets/img/pulpo.png" class="pez pez-pulpo">
+        <img src="assets/img/globo.png" class="pez pez-globo">
+        <img src="assets/img/tortuga.png" class="pez pez-tortuga">
+    </div>
+
+    <div class="game-container" id="game-container">
         <header class="ui-header">
-            <h1 class="logo-mini"><span>🐟</span> FISH CATCHER</h1>
+            <div class="logo-mini">🐟 FISH CATCHER</div>
             <div class="stats">
                 <span>Puntos: <strong id="puntos">0</strong></span>
                 <span>Vidas: <strong id="vidas">3</strong></span>
-                <span>Tiempo: <strong id="tiempo">60</strong></span>
+                <span>Tiempo: <strong id="tiempo">50</strong></span>
                 <span>Nivel: <strong id="nivel">1</strong></span>
             </div>
         </header>
-
         <div class="game-area">
             <canvas id="gameCanvas"></canvas>
-
-            <div id="start-screen" class="overlay">
-                <h2 class="titulo-grande">Fish Catcher</h2>
-                <p>Relaxing Ocean Adventure</p>
-                <button id="btnJugar" class="btn-principal">¡JUGAR!</button>
-            </div>
         </div>
     </div>
 
