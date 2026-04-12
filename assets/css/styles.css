@@ -28,10 +28,9 @@ body, html {
 }
 
 .ui-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 10;
 }
 
 .logo-texto {
@@ -49,31 +48,56 @@ body, html {
     border-radius: 50px; cursor: pointer;
     background: linear-gradient(#00d2ff, #3a7bd5);
     box-shadow: 0 8px 0 #255a9e;
+    transition: 0.2s;
 }
 
-.pez { position: absolute; z-index: 2; max-width: 120px; height: auto; }
-.pez-dorado { top: 15%; left: 10%; }
-.pez-pulpo   { top: 15%; left: 50%; transform: translateX(-50%); }
-.pez-beta    { top: 15%; right: 10%; }
-.pez-azul    { bottom: 12%; left: 10%; transform: scaleX(-1); }
-.pez-globo   { bottom: 10%; left: 50%; transform: translateX(-50%); }
-.pez-tortuga { bottom: 12%; right: 10%; }
+.btn-inicio-pro:hover { transform: scale(1.05); }
 
-/* --- INTERFAZ --- */
+/* --- ANIMACIÓN DE NADO (MENÚ) --- */
+@keyframes nadarMenu {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(15px, -20px) rotate(5deg); }
+    66% { transform: translate(-10px, 10px) rotate(-5deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.pez { 
+    position: absolute; z-index: 2; 
+    max-width: 120px; height: auto; 
+    animation: nadarMenu 6s ease-in-out infinite; 
+}
+
+.pez-dorado { top: 15%; left: 10%; animation-delay: 0s; }
+.pez-pulpo   { top: 15%; left: 50%; transform: translateX(-50%); animation-delay: -1s; }
+.pez-beta    { top: 15%; right: 10%; animation-delay: -2s; }
+.pez-azul    { bottom: 12%; left: 10%; animation-delay: -3.5s; }
+.pez-globo   { bottom: 10%; left: 50%; transform: translateX(-50%); animation-delay: -0.5s; }
+.pez-tortuga { bottom: 12%; right: 10%; animation-delay: -4s; }
+
+/* --- INTERFAZ DEL JUEGO (CENTRO TRANSPARENTE) --- */
 .game-container {
-    position: relative; width: 95%; height: 90%;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 30px; display: none;
-    flex-direction: column; z-index: 10;
-    border: 2px solid rgba(255,255,255,0.2);
+    position: relative; 
+    width: 90%; 
+    height: 85%;
+    background: transparent; 
+    border-radius: 40px; 
+    display: none; 
+    flex-direction: column; 
+    z-index: 10;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .ui-header {
-    display: flex; justify-content: space-between;
-    align-items: center; padding: 0 30px;
-    height: 70px; background: rgba(0, 150, 255, 0.2);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    padding: 0 40px;
+    height: 80px; 
+    background: rgba(0, 40, 80, 0.4); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .stats { display: flex; gap: 25px; color: white; font-weight: bold; }
@@ -81,16 +105,24 @@ body, html {
 .icon-mini { width: 22px; height: auto; }
 
 .main-layout {
-    display: grid; grid-template-columns: 260px 1fr 260px;
-    gap: 15px; padding: 15px; flex-grow: 1;
-    align-items: start; /* Asegura que ambos paneles empiecen arriba */
+    display: grid; 
+    grid-template-columns: 280px 1fr 280px;
+    gap: 20px; 
+    padding: 20px; 
+    flex-grow: 1;
+    align-items: start;
 }
 
+/* Cajas laterales tipo cristal esmerilado */
 .box-pro {
-    background: rgba(0, 50, 100, 0.5);
-    border: 2px solid rgba(0, 255, 255, 0.2);
-    border-radius: 20px; padding: 15px; color: white;
-    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px; 
+    padding: 20px; 
+    color: white;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .box-pro h3 {
@@ -101,26 +133,71 @@ body, html {
 
 .item-obj { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
 
-.panel-lateral.right {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; /* Cambio de center a flex-start para nivelar */
-    gap: 15px;
-    height: 100%;
-}
-
+/* ÁREA CENTRAL CON LÍNEA TIPO VIDRIO */
 .game-area {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 25px; overflow: hidden; position: relative;
-    height: 100%; /* Asegura que el canvas use el espacio disponible */
+    background: rgba(255, 255, 255, 0.03); 
+    border-radius: 30px; 
+    overflow: hidden; 
+    position: relative;
+    height: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.15); 
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05);
 }
 
-#gameCanvas { width: 100%; height: 100%; cursor: none; }
+#gameCanvas { 
+    width: 100%; 
+    height: 100%; 
+    cursor: none; 
+    background: transparent; 
+}
 
 .btn-pausa-pro {
-    background: #ff6600; color: white; border: none;
-    padding: 12px 40px; border-radius: 50px; font-weight: bold;
-    cursor: pointer; transition: 0.3s;
-    width: 100%; /* Opcional: para que ocupe el mismo ancho que el box */
+    background: linear-gradient(45deg, #ff6600, #ff9900);
+    color: white; border: none;
+    padding: 15px; border-radius: 20px; font-weight: bold;
+    cursor: pointer; margin-top: 15px; width: 100%;
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+    transition: 0.3s;
+}
+
+.btn-pausa-pro:hover { transform: translateY(-2px); }
+
+/* --- ADICIÓN PARA MÓVILES (Vertical y Horizontal) --- */
+@media (max-width: 900px) {
+    .logo-texto { font-size: 50px; -webkit-text-stroke: 6px white; }
+    .btn-inicio-pro { padding: 12px 40px; font-size: 20px; }
+    .pez { max-width: 80px; }
+    
+    .game-container { width: 95%; height: 95%; border-radius: 20px; }
+    .ui-header { padding: 0 15px; height: 60px; }
+    .stats { gap: 10px; }
+    .stats span { font-size: 12px; gap: 4px; }
+    .icon-mini { width: 16px; }
+    .logo-mini { font-size: 12px; }
+
+    /* Cambio de Grid a Layout Vertical/Adaptable */
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    .panel-lateral { width: 100%; }
+    .game-area { width: 100%; height: 300px; min-height: 250px; } /* Altura fija para el canvas en móvil */
+    
+    .box-pro { padding: 10px; border-radius: 15px; }
+    .box-pro h3 { font-size: 12px; margin-bottom: 5px; }
+    .item-obj { font-size: 11px; margin-bottom: 4px; }
+}
+
+/* Ajuste específico para modo horizontal en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    .main-layout { flex-direction: row; align-items: stretch; }
+    .panel-lateral { width: 150px; flex-shrink: 0; }
+    .game-area { flex-grow: 1; height: auto; }
+    .ui-header { height: 40px; }
+    .logo-texto { font-size: 40px; }
+    .pez { max-width: 60px; }
 }

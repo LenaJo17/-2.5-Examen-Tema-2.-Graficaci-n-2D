@@ -72,11 +72,23 @@ document.querySelector(".btn-pausa-pro").addEventListener("click", () => {
     btn.style.background = pausado ? "#00ffaa" : "#ff6600";
 });
 
+// Mouse
 gCanvas.addEventListener("mousemove", (e) => {
     const rect = gCanvas.getBoundingClientRect();
     depredador.x = e.clientX - rect.left;
     depredador.y = e.clientY - rect.top;
 });
+
+// Táctil (Añadido para celular)
+const handleTouch = (e) => {
+    e.preventDefault();
+    const rect = gCanvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    depredador.x = touch.clientX - rect.left;
+    depredador.y = touch.clientY - rect.top;
+};
+gCanvas.addEventListener("touchstart", handleTouch, {passive: false});
+gCanvas.addEventListener("touchmove", handleTouch, {passive: false});
 
 function iniciarContador() {
     const timer = setInterval(() => {
@@ -117,7 +129,6 @@ function actualizarUI() {
     document.getElementById("stat-danio").innerText = totalDanio;
 }
 
-// Nueva función para evitar que los peces salgan amontonados
 function obtenerXDispersa() {
     let nuevaX;
     let intentos = 0;
@@ -138,20 +149,18 @@ function loop() {
         gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
         gCtx.drawImage(imgS.linterna, depredador.x - 40, depredador.y - 40, 80, 80);
 
-        // Subida de nivel a los 250 y 500 puntos
         if (nivel === 1 && puntos >= 250) nivel = 2;
         else if (nivel === 2 && puntos >= 500) nivel = 3;
         else if (nivel === 3 && puntos >= 750) nivel = 4;
         else if (nivel === 4 && puntos >= 1000) nivel = 5;
 
-        // Frecuencia y dispersión
         if (Math.random() < (0.02 + (nivel * 0.015))) {
             const tipos = ["azul", "dorado", "beta", "globo"];
             pecesJuego.push({
                 x: obtenerXDispersa(),
                 y: gCanvas.height + 50,
                 tipo: tipos[Math.floor(Math.random() * tipos.length)],
-                speed: 1.5 + (nivel * 0.7) // Velocidad incrementada
+                speed: 1.5 + (nivel * 0.7)
             });
         }
 
