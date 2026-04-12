@@ -4,10 +4,14 @@ const gCanvas = document.getElementById("gameCanvas");
 const gCtx = gCanvas.getContext("2d");
 
 let juegoActivo = false;
-let puntos = 0, vidas = 3, tiempo = 50, nivel = 1;
+let pausado = false;
+let puntos = 0, vidas = 5, tiempo = 50, nivel = 1;
 let burbujas = [], pecesJuego = [];
+let pecesAtrapados = 0, globosEvitados = 0, doradosAtrapados = 0, totalDanio = 0;
 
-// Imágenes
+let mejorRecord = localStorage.getItem("mejorRecord") || 0;
+document.getElementById("mejor-puntos").innerText = mejorRecord;
+
 const imgS = {
     azul: new Image(), dorado: new Image(), beta: new Image(),
     globo: new Image(), linterna: new Image()
@@ -24,7 +28,6 @@ function resize() {
     bCanvas.width = window.innerWidth;
     bCanvas.height = window.innerHeight;
     if (juegoActivo) {
-        // Ajustamos el canvas interno al contenedor de cristal
         gCanvas.width = gCanvas.parentElement.clientWidth;
         gCanvas.height = gCanvas.parentElement.clientHeight;
     }
@@ -32,7 +35,6 @@ function resize() {
 window.addEventListener("resize", resize);
 resize();
 
-// Clase Burbuja Realista
 class Burbuja {
     constructor(initAll) {
         this.size = Math.random() * 20 + 15;
@@ -53,16 +55,21 @@ class Burbuja {
         bCtx.restore();
     }
 }
-
 for (let i = 0; i < 30; i++) burbujas.push(new Burbuja(true));
 
-// Lógica de cambio de pantalla
 document.getElementById("btn-jugar").addEventListener("click", () => {
-    document.getElementById("menu-inicio").style.display = "none"; // Oculta TODO el inicio
-    document.getElementById("game-container").style.display = "flex"; // Muestra el cuadro de juego
+    document.getElementById("menu-inicio").style.display = "none";
+    document.getElementById("game-container").style.display = "flex";
     juegoActivo = true;
     resize();
     iniciarContador();
+});
+
+document.querySelector(".btn-pausa-pro").addEventListener("click", () => {
+    pausado = !pausado;
+    const btn = document.querySelector(".btn-pausa-pro");
+    btn.innerText = pausado ? "REANUDAR" : "PAUSA";
+    btn.style.background = pausado ? "#00ffaa" : "#ff6600";
 });
 
 gCanvas.addEventListener("mousemove", (e) => {
@@ -74,54 +81,106 @@ gCanvas.addEventListener("mousemove", (e) => {
 function iniciarContador() {
     const timer = setInterval(() => {
         if (!juegoActivo) { clearInterval(timer); return; }
-        tiempo--;
-        if (tiempo <= 0 || vidas <= 0) {
-            juegoActivo = false;
-            alert(`Fin del Juego. Puntos: ${puntos}`);
-            location.reload();
+        if (!pausado) {
+            tiempo--;
+            if (tiempo <= 0 || vidas <= 0) {
+                juegoActivo = false;
+                if (puntos > mejorRecord) {
+                    localStorage.setItem("mejorRecord", puntos);
+                }
+                alert(`Fin del Juego.\nPuntos: ${puntos}`);
+                location.reload();
+            }
         }
     }, 1000);
+}
+
+function actualizarUI() {
+    document.getElementById("puntos").innerText = puntos;
+    document.getElementById("vidas").innerText = vidas;
+    document.getElementById("tiempo").innerText = tiempo;
+    document.getElementById("nivel").innerText = nivel;
+
+    const spanPeces = document.getElementById("obj-peces");
+    const spanGlobos = document.getElementById("obj-globos");
+    const spanDorado = document.getElementById("obj-dorado");
+
+    spanPeces.innerText = `${pecesAtrapados}/10`;
+    spanGlobos.innerText = `${globosEvitados}/2`;
+    spanDorado.innerText = `${doradosAtrapados}/1`;
+
+    if (pecesAtrapados >= 10) spanPeces.style.color = "#00ffaa";
+    if (globosEvitados >= 2) spanGlobos.style.color = "#00ffaa";
+    if (doradosAtrapados >= 1) spanDorado.style.color = "#00ffaa";
+
+    document.getElementById("stat-peces").innerText = pecesAtrapados;
+    document.getElementById("stat-danio").innerText = totalDanio;
+}
+
+// Nueva función para evitar que los peces salgan amontonados
+function obtenerXDispersa() {
+    let nuevaX;
+    let intentos = 0;
+    let muyCerca;
+    do {
+        nuevaX = Math.random() * (gCanvas.width - 50);
+        muyCerca = pecesJuego.some(p => Math.abs(p.x - nuevaX) < 60 && p.y > gCanvas.height - 100);
+        intentos++;
+    } while (muyCerca && intentos < 10);
+    return nuevaX;
 }
 
 function loop() {
     bCtx.clearRect(0, 0, bCanvas.width, bCanvas.height);
     burbujas.forEach(b => b.draw());
 
-    if (juegoActivo) {
+    if (juegoActivo && !pausado) {
         gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
-        
-        // Dibujar depredador (Pez Linterna)
         gCtx.drawImage(imgS.linterna, depredador.x - 40, depredador.y - 40, 80, 80);
 
-        // Generar peces comida
-        if (Math.random() < 0.03) {
-            const t = ["azul", "dorado", "beta", "globo"];
+        // Subida de nivel a los 250 y 500 puntos
+        if (nivel === 1 && puntos >= 250) nivel = 2;
+        else if (nivel === 2 && puntos >= 500) nivel = 3;
+        else if (nivel === 3 && puntos >= 750) nivel = 4;
+        else if (nivel === 4 && puntos >= 1000) nivel = 5;
+
+        // Frecuencia y dispersión
+        if (Math.random() < (0.02 + (nivel * 0.015))) {
+            const tipos = ["azul", "dorado", "beta", "globo"];
             pecesJuego.push({
-                x: Math.random() * (gCanvas.width - 40),
-                y: gCanvas.height + 40,
-                tipo: t[Math.floor(Math.random() * 4)],
-                speed: 1.5 + (nivel * 0.3)
+                x: obtenerXDispersa(),
+                y: gCanvas.height + 50,
+                tipo: tipos[Math.floor(Math.random() * tipos.length)],
+                speed: 1.5 + (nivel * 0.7) // Velocidad incrementada
             });
         }
 
-        pecesJuego.forEach((p, i) => {
+        for (let i = pecesJuego.length - 1; i >= 0; i--) {
+            let p = pecesJuego[i];
             p.y -= p.speed;
             gCtx.drawImage(imgS[p.tipo], p.x, p.y, 45, 45);
-            
-            // Colisión
-            let d = Math.hypot(depredador.x - (p.x + 22), depredador.y - (p.y + 22));
-            if (d < 45) {
-                if (p.tipo === "globo") vidas--;
-                else puntos += 10;
+
+            if (p.y < -50) {
+                if (p.tipo !== "globo") vidas--;
+                else globosEvitados++;
+                pecesJuego.splice(i, 1);
+                continue;
+            }
+
+            let dist = Math.hypot(depredador.x - (p.x + 22), depredador.y - (p.y + 22));
+            if (dist < 45) {
+                if (p.tipo === "globo") {
+                    vidas--;
+                    totalDanio++;
+                } else {
+                    puntos += (p.tipo === "dorado" ? 50 : 10);
+                    pecesAtrapados++;
+                    if (p.tipo === "dorado") doradosAtrapados++;
+                }
                 pecesJuego.splice(i, 1);
             }
-        });
-
-        // UI
-        document.getElementById("puntos").innerText = puntos;
-        document.getElementById("vidas").innerText = vidas;
-        document.getElementById("tiempo").innerText = tiempo;
-        document.getElementById("nivel").innerText = nivel;
+        }
+        actualizarUI();
     }
     requestAnimationFrame(loop);
 }

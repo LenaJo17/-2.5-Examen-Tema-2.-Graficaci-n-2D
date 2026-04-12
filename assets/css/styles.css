@@ -27,11 +27,19 @@ body, html {
     z-index: 100;
 }
 
+.ui-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .logo-texto {
     font-size: 85px; color: #4da6ff;
     -webkit-text-stroke: 10px white;
     paint-order: stroke fill;
     text-shadow: 0 10px 0px rgba(0,0,0,0.1);
+    margin: 0;
 }
 
 .btn-inicio-pro {
@@ -43,23 +51,15 @@ body, html {
     box-shadow: 0 8px 0 #255a9e;
 }
 
-/* --- PECES ORDENADOS (3 ARRIBA Y 3 ABAJO) --- */
-.pez {
-    position: absolute; z-index: 2;
-    max-width: 120px !important; height: auto;
-}
-
-/* FILA SUPERIOR (Alineados al 15%) */
+.pez { position: absolute; z-index: 2; max-width: 120px; height: auto; }
 .pez-dorado { top: 15%; left: 10%; }
 .pez-pulpo   { top: 15%; left: 50%; transform: translateX(-50%); }
 .pez-beta    { top: 15%; right: 10%; }
-
-/* FILA INFERIOR (Alineados al 15% desde abajo) */
 .pez-azul    { bottom: 12%; left: 10%; transform: scaleX(-1); }
 .pez-globo   { bottom: 10%; left: 50%; transform: translateX(-50%); }
 .pez-tortuga { bottom: 12%; right: 10%; }
 
-/* --- INTERFAZ DE JUEGO (BARRA SUPERIOR) --- */
+/* --- INTERFAZ --- */
 .game-container {
     position: relative; width: 95%; height: 90%;
     background: rgba(255, 255, 255, 0.1);
@@ -80,16 +80,17 @@ body, html {
 .stats span { display: flex; align-items: center; gap: 8px; font-size: 18px; }
 .icon-mini { width: 22px; height: auto; }
 
-/* --- LAYOUT DE PANELES --- */
 .main-layout {
     display: grid; grid-template-columns: 260px 1fr 260px;
     gap: 15px; padding: 15px; flex-grow: 1;
+    align-items: start; /* Asegura que ambos paneles empiecen arriba */
 }
 
 .box-pro {
     background: rgba(0, 50, 100, 0.5);
     border: 2px solid rgba(0, 255, 255, 0.2);
     border-radius: 20px; padding: 15px; color: white;
+    width: 100%;
 }
 
 .box-pro h3 {
@@ -99,32 +100,27 @@ body, html {
 }
 
 .item-obj { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
-.item-obj span { color: #00ffaa; }
 
-.combo-badge {
-    background: linear-gradient(90deg, #ff6600, #ffcc00);
-    padding: 15px; border-radius: 50px;
-    text-align: center; color: white; font-weight: bold;
-    border: 3px solid white; margin-top: auto;
-}
-
-.time-circle {
-    width: 100px; height: 100px; border-radius: 50%;
-    border: 6px solid #ffcc00; display: flex;
-    justify-content: center; align-items: center;
-    font-size: 24px; font-weight: bold; color: white;
-    margin: 0 auto 20px; background: rgba(0,0,0,0.2);
+.panel-lateral.right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Cambio de center a flex-start para nivelar */
+    gap: 15px;
+    height: 100%;
 }
 
 .game-area {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 25px; overflow: hidden; position: relative;
+    height: 100%; /* Asegura que el canvas use el espacio disponible */
 }
 
 #gameCanvas { width: 100%; height: 100%; cursor: none; }
 
 .btn-pausa-pro {
     background: #ff6600; color: white; border: none;
-    padding: 12px; border-radius: 50px; font-weight: bold;
-    margin-top: auto; cursor: pointer;
+    padding: 12px 40px; border-radius: 50px; font-weight: bold;
+    cursor: pointer; transition: 0.3s;
+    width: 100%; /* Opcional: para que ocupe el mismo ancho que el box */
 }
