@@ -43,17 +43,21 @@ body, html {
     box-shadow: 0 8px 0 #255a9e;
 }
 
-/* --- PREVENCIÓN DE PECES GIGANTES --- */
+/* --- PECES ORDENADOS (3 ARRIBA Y 3 ABAJO) --- */
 .pez {
     position: absolute; z-index: 2;
     max-width: 120px !important; height: auto;
 }
+
+/* FILA SUPERIOR (Alineados al 15%) */
 .pez-dorado { top: 15%; left: 10%; }
-.pez-azul   { top: 50%; left: 15%; transform: scaleX(-1); }
-.pez-beta   { top: 20%; right: 10%; }
-.pez-pulpo  { top: 10%; right: 40%; }
-.pez-globo  { bottom: 15%; left: 15%; }
-.pez-tortuga { bottom: 15%; right: 10%; }
+.pez-pulpo   { top: 15%; left: 50%; transform: translateX(-50%); }
+.pez-beta    { top: 15%; right: 10%; }
+
+/* FILA INFERIOR (Alineados al 15% desde abajo) */
+.pez-azul    { bottom: 12%; left: 10%; transform: scaleX(-1); }
+.pez-globo   { bottom: 10%; left: 50%; transform: translateX(-50%); }
+.pez-tortuga { bottom: 12%; right: 10%; }
 
 /* --- INTERFAZ DE JUEGO (BARRA SUPERIOR) --- */
 .game-container {
