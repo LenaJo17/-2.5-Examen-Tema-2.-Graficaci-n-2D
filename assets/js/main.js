@@ -28,9 +28,9 @@ function resize() {
     bCanvas.width = window.innerWidth;
     bCanvas.height = window.innerHeight;
     if (juegoActivo) {
-        // Esto asegura que el canvas tome el tamaño del área de juego definida en CSS
-        gCanvas.width = gCanvas.parentElement.clientWidth;
-        gCanvas.height = gCanvas.parentElement.clientHeight;
+        // Mantiene el diseño del canvas ajustándose al contenedor
+        gCanvas.width = gCanvas.parentElement.offsetWidth;
+        gCanvas.height = gCanvas.parentElement.offsetHeight;
     }
 }
 window.addEventListener("resize", resize);
@@ -70,26 +70,20 @@ document.querySelector(".btn-pausa-pro").addEventListener("click", () => {
     pausado = !pausado;
     const btn = document.querySelector(".btn-pausa-pro");
     btn.innerText = pausado ? "REANUDAR" : "PAUSA";
-    btn.style.background = pausado ? "#00ffaa" : "#ff6600";
 });
 
-// --- CONTROLES MOUSE ---
-gCanvas.addEventListener("mousemove", (e) => {
+// EVENTOS DE CONTROL (MOUSE Y TACTIL)
+const actPos = (posX, posY) => {
     const rect = gCanvas.getBoundingClientRect();
-    depredador.x = e.clientX - rect.left;
-    depredador.y = e.clientY - rect.top;
-});
-
-// --- CONTROLES TÁCTILES (CORREGIDO PARA MÓVIL) ---
-const handleTouch = (e) => {
-    e.preventDefault();
-    const rect = gCanvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    depredador.x = touch.clientX - rect.left;
-    depredador.y = touch.clientY - rect.top;
+    depredador.x = posX - rect.left;
+    depredador.y = posY - rect.top;
 };
-gCanvas.addEventListener("touchstart", handleTouch, {passive: false});
-gCanvas.addEventListener("touchmove", handleTouch, {passive: false});
+
+gCanvas.addEventListener("mousemove", (e) => actPos(e.clientX, e.clientY));
+gCanvas.addEventListener("touchmove", (e) => {
+    e.preventDefault();
+    actPos(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
 
 function iniciarContador() {
     const timer = setInterval(() => {
@@ -98,9 +92,7 @@ function iniciarContador() {
             tiempo--;
             if (tiempo <= 0 || vidas <= 0) {
                 juegoActivo = false;
-                if (puntos > mejorRecord) {
-                    localStorage.setItem("mejorRecord", puntos);
-                }
+                if (puntos > mejorRecord) localStorage.setItem("mejorRecord", puntos);
                 alert(`Fin del Juego.\nPuntos: ${puntos}`);
                 location.reload();
             }
@@ -113,33 +105,11 @@ function actualizarUI() {
     document.getElementById("vidas").innerText = vidas;
     document.getElementById("tiempo").innerText = tiempo;
     document.getElementById("nivel").innerText = nivel;
-
-    const spanPeces = document.getElementById("obj-peces");
-    const spanGlobos = document.getElementById("obj-globos");
-    const spanDorado = document.getElementById("obj-dorado");
-
-    spanPeces.innerText = `${pecesAtrapados}/10`;
-    spanGlobos.innerText = `${globosEvitados}/2`;
-    spanDorado.innerText = `${doradosAtrapados}/1`;
-
-    if (pecesAtrapados >= 10) spanPeces.style.color = "#00ffaa";
-    if (globosEvitados >= 2) spanGlobos.style.color = "#00ffaa";
-    if (doradosAtrapados >= 1) spanDorado.style.color = "#00ffaa";
-
+    document.getElementById("obj-peces").innerText = `${pecesAtrapados}/10`;
+    document.getElementById("obj-globos").innerText = `${globosEvitados}/2`;
+    document.getElementById("obj-dorado").innerText = `${doradosAtrapados}/1`;
     document.getElementById("stat-peces").innerText = pecesAtrapados;
     document.getElementById("stat-danio").innerText = totalDanio;
-}
-
-function obtenerXDispersa() {
-    let nuevaX;
-    let intentos = 0;
-    let muyCerca;
-    do {
-        nuevaX = Math.random() * (gCanvas.width - 50);
-        muyCerca = pecesJuego.some(p => Math.abs(p.x - nuevaX) < 60 && p.y > gCanvas.height - 100);
-        intentos++;
-    } while (muyCerca && intentos < 10);
-    return nuevaX;
 }
 
 function loop() {
@@ -148,17 +118,13 @@ function loop() {
 
     if (juegoActivo && !pausado) {
         gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
+        // Mantiene tu diseño de linterna original
         gCtx.drawImage(imgS.linterna, depredador.x - 40, depredador.y - 40, 80, 80);
-
-        if (nivel === 1 && puntos >= 250) nivel = 2;
-        else if (nivel === 2 && puntos >= 500) nivel = 3;
-        else if (nivel === 3 && puntos >= 750) nivel = 4;
-        else if (nivel === 4 && puntos >= 1000) nivel = 5;
 
         if (Math.random() < (0.02 + (nivel * 0.015))) {
             const tipos = ["azul", "dorado", "beta", "globo"];
             pecesJuego.push({
-                x: obtenerXDispersa(),
+                x: Math.random() * (gCanvas.width - 50),
                 y: gCanvas.height + 50,
                 tipo: tipos[Math.floor(Math.random() * tipos.length)],
                 speed: 1.5 + (nivel * 0.7)
@@ -179,14 +145,8 @@ function loop() {
 
             let dist = Math.hypot(depredador.x - (p.x + 22), depredador.y - (p.y + 22));
             if (dist < 45) {
-                if (p.tipo === "globo") {
-                    vidas--;
-                    totalDanio++;
-                } else {
-                    puntos += (p.tipo === "dorado" ? 50 : 10);
-                    pecesAtrapados++;
-                    if (p.tipo === "dorado") doradosAtrapados++;
-                }
+                if (p.tipo === "globo") { vidas--; totalDanio++; } 
+                else { puntos += (p.tipo === "dorado" ? 50 : 10); pecesAtrapados++; if (p.tipo === "dorado") doradosAtrapados++; }
                 pecesJuego.splice(i, 1);
             }
         }

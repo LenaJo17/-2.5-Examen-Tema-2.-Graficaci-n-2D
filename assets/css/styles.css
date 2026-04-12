@@ -1,4 +1,4 @@
-/* --- BASE --- */
+/* --- BASE (Tus estilos originales) --- */
 * { box-sizing: border-box; }
 body, html {
     margin: 0; padding: 0;
@@ -51,53 +51,39 @@ body, html {
     transition: 0.2s;
 }
 
-.btn-inicio-pro:hover { transform: scale(1.05); }
-
-/* --- ANIMACIONES --- */
+/* --- PECES MENÚ --- */
+.pez { position: absolute; z-index: 2; max-width: 120px; height: auto; animation: nadarMenu 6s ease-in-out infinite; }
 @keyframes nadarMenu {
     0% { transform: translate(0, 0) rotate(0deg); }
     33% { transform: translate(15px, -20px) rotate(5deg); }
     66% { transform: translate(-10px, 10px) rotate(-5deg); }
     100% { transform: translate(0, 0) rotate(0deg); }
 }
+.pez-dorado { top: 15%; left: 10%; }
+.pez-pulpo { top: 15%; left: 50%; transform: translateX(-50%); }
+.pez-beta { top: 15%; right: 10%; }
+.pez-azul { bottom: 12%; left: 10%; }
+.pez-globo { bottom: 10%; left: 50%; transform: translateX(-50%); }
+.pez-tortuga { bottom: 12%; right: 10%; }
 
-.pez { 
-    position: absolute; z-index: 2; 
-    max-width: 120px; height: auto; 
-    animation: nadarMenu 6s ease-in-out infinite; 
-}
-
-.pez-dorado { top: 15%; left: 10%; animation-delay: 0s; }
-.pez-pulpo   { top: 15%; left: 50%; transform: translateX(-50%); animation-delay: -1s; }
-.pez-beta    { top: 15%; right: 10%; animation-delay: -2s; }
-.pez-azul    { bottom: 12%; left: 10%; animation-delay: -3.5s; }
-.pez-globo   { bottom: 10%; left: 50%; transform: translateX(-50%); animation-delay: -0.5s; }
-.pez-tortuga { bottom: 12%; right: 10%; animation-delay: -4s; }
-
-/* --- INTERFAZ DEL JUEGO --- */
+/* --- CONTENEDOR DE JUEGO (LÍNEA EXTERIOR ARREGLADA) --- */
 .game-container {
-    position: relative; 
-    width: 90%; 
-    height: 85%;
-    background: transparent; 
-    border-radius: 40px; 
-    display: none; 
-    flex-direction: column; 
-    z-index: 10;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative; width: 90%; height: 85%;
+    background: transparent; border-radius: 40px; 
+    display: none; flex-direction: column; z-index: 10;
+    overflow: hidden; 
+    /* Esta es la línea exterior que ahora se ve claramente */
+    border: 3px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
+/* --- CABECERA CON LÍNEA REFORZADA --- */
 .ui-header {
-    display: flex; 
-    justify-content: space-between;
-    align-items: center; 
-    padding: 0 40px;
-    height: 80px; 
-    background: rgba(0, 40, 80, 0.4); 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex; justify-content: space-between; align-items: center; 
+    padding: 0 40px; height: 80px; background: rgba(0, 40, 80, 0.4); 
+    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    /* Línea inferior marcada */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 .stats { display: flex; gap: 25px; color: white; font-weight: bold; }
@@ -105,108 +91,86 @@ body, html {
 .icon-mini { width: 22px; height: auto; }
 
 .main-layout {
-    display: grid; 
-    grid-template-columns: 280px 1fr 280px;
-    gap: 20px; 
-    padding: 20px; 
-    flex-grow: 1;
-    align-items: start;
+    display: grid; grid-template-columns: 280px 1fr 280px;
+    gap: 20px; padding: 20px; flex-grow: 1; align-items: start;
 }
 
+/* --- PANELES CON LÍNEA TIPO VIDRIO REFORZADA --- */
 .box-pro {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15); 
+    backdrop-filter: blur(20px);          
+    -webkit-backdrop-filter: blur(20px);
+    /* Línea de borde más visible */
+    border: 2px solid rgba(255, 255, 255, 0.4); 
     border-radius: 25px; 
-    padding: 20px; 
-    color: white;
+    padding: 20px; color: white;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
-.box-pro h3 {
-    margin: 0 0 10px 0; font-size: 14px;
-    color: #00ffff; text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+.box-pro h3 { 
+    margin: 0 0 10px 0; font-size: 14px; color: #00ffff; text-align: center; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Línea interna */
+    padding-bottom: 5px;
 }
-
 .item-obj { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
 
+/* --- ÁREA DE JUEGO --- */
 .game-area {
     background: rgba(255, 255, 255, 0.03); 
     border-radius: 30px; 
     overflow: hidden; 
-    position: relative;
+    position: relative; 
     height: 100%;
-    border: 2px solid rgba(255, 255, 255, 0.15); 
-    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.4); 
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
-#gameCanvas { 
-    width: 100%; 
-    height: 100%; 
-    cursor: none; 
-    background: transparent; 
-}
+#gameCanvas { width: 100%; height: 100%; cursor: none; }
 
+/* --- BOTÓN PAUSA CON LÍNEA COORDINADA --- */
 .btn-pausa-pro {
-    background: linear-gradient(45deg, #ff6600, #ff9900);
-    color: white; border: none;
-    padding: 15px; border-radius: 20px; font-weight: bold;
-    cursor: pointer; margin-top: 15px; width: 100%;
-    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
-    transition: 0.3s;
+    background: rgba(0, 162, 255, 0.3); 
+    backdrop-filter: blur(10px);        
+    -webkit-backdrop-filter: blur(10px);
+    color: white; 
+    /* Borde más sólido */
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    padding: 15px; border-radius: 20px; font-weight: bold; 
+    cursor: pointer; width: 100%; margin-top: 15px;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* --- RESPONSIVE / MÓVILES (CORREGIDO) --- */
+.btn-pausa-pro:hover {
+    background: rgba(0, 162, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+/* --- ADAPTACIÓN PARA MÓVIL --- */
 @media (max-width: 900px) {
-    .logo-texto { font-size: 40px; -webkit-text-stroke: 5px white; }
-    .btn-inicio-pro { padding: 10px 30px; font-size: 18px; }
-    .pez { max-width: 60px; }
+    .logo-texto { font-size: 45px; -webkit-text-stroke: 6px white; }
     
-    .game-container { 
-        width: 98%; 
-        height: 98%; 
-        border-radius: 20px; 
-        overflow-y: auto; /* Permite scroll si la pantalla es muy chica */
-    }
-
+    .game-container { width: 100%; height: 100%; border-radius: 0; border: none; }
     .ui-header { 
-        padding: 5px 10px; 
-        height: auto; 
-        flex-direction: column;
-        gap: 5px;
+        padding: 10px 15px; height: auto; flex-direction: column; 
+        border-bottom: 2px solid rgba(255, 255, 255, 0.4);
     }
+    .stats { gap: 10px; margin-bottom: 10px; }
+    .stats span { font-size: 12px; }
 
-    .stats { gap: 8px; flex-wrap: wrap; justify-content: center; }
-    .stats span { font-size: 11px; }
-
-    /* Apilamos elementos en vertical */
     .main-layout {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        padding: 10px;
+        display: flex; flex-direction: column; 
+        padding: 10px; overflow-y: auto;
     }
 
-    /* El juego arriba para que se pueda ver y tocar */
-    .game-area { 
-        width: 100%; 
-        height: 45vh; /* Ocupa casi la mitad de la altura disponible */
+    .game-area {
+        width: 100%;
+        height: 50vh; 
         min-height: 300px;
-        order: 1; 
+        order: -1; 
+        border: 2px solid rgba(255, 255, 255, 0.4);
     }
-    
-    .panel-lateral { width: 100%; order: 2; }
-    
-    .box-pro { padding: 15px; border-radius: 20px; }
-    .item-obj, .box-pro p { font-size: 12px; }
-}
 
-/* Modo Horizontal en Celular */
-@media (max-height: 500px) and (orientation: landscape) {
-    .main-layout { flex-direction: row; }
-    .panel-lateral { width: 200px; }
-    .game-area { height: 100%; flex-grow: 1; }
-    .ui-header { display: none; }
+    .panel-lateral { width: 100%; }
+    .box-pro { padding: 15px; margin-bottom: 10px; border: 2px solid rgba(255, 255, 255, 0.4); }
 }
