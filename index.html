@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fish Catcher</title>
+    <title>Fish Catcher - Mega Pro</title>
+    
+    <link rel="icon" type="image/png" href="assets/img/azul.png">
+    
     <link rel="stylesheet" href="assets/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -15,9 +18,8 @@
         <div class="ui-content">
             <h1 class="logo-texto">Fish Catcher</h1>
             <p class="subtitulo">Relaxing Ocean Adventure</p>
-            <button id="btn-jugar">¡JUGAR!</button>
+            <button id="btn-jugar" class="btn-inicio-pro">¡JUGAR!</button>
         </div>
-
         <img src="assets/img/dorado.png" class="pez pez-dorado">
         <img src="assets/img/azul.png" class="pez pez-azul">
         <img src="assets/img/beta.png" class="pez pez-beta">
@@ -30,14 +32,48 @@
         <header class="ui-header">
             <div class="logo-mini">🐟 FISH CATCHER</div>
             <div class="stats">
-                <span>Puntos: <strong id="puntos">0</strong></span>
-                <span>Vidas: <strong id="vidas">3</strong></span>
-                <span>Tiempo: <strong id="tiempo">50</strong></span>
-                <span>Nivel: <strong id="nivel">1</strong></span>
+                <span><img src="assets/img/azul.png" class="icon-mini"> Puntos: <strong id="puntos">0</strong></span>
+                <span><img src="assets/img/pulpo.png" class="icon-mini"> Vidas: <strong id="vidas">3</strong></span>
+                <span>⏱️ Tiempo: <strong id="tiempo">50</strong></span>
+                <span>👑 Nivel: <strong id="nivel">1</strong></span>
             </div>
         </header>
-        <div class="game-area">
-            <canvas id="gameCanvas"></canvas>
+
+        <div class="main-layout">
+            <aside class="panel-lateral left">
+                <div class="box-pro">
+                    <h3>OBJETIVOS</h3>
+                    <div class="item-obj">🐟 Atrapa 10 peces <span id="obj-peces">0/10</span></div>
+                    <div class="item-obj">🐡 Evita 2 globos <span id="obj-globos">0/2</span></div>
+                    <div class="item-obj">✨ Consigue 1 dorado <span id="obj-dorado">0/1</span></div>
+                </div>
+                <div class="box-pro">
+                    <h3>POWER-UPS</h3>
+                    <div class="power-grid">
+                        <div class="p-icon">🧲</div>
+                        <div class="p-icon">❄️</div>
+                        <div class="p-icon">⏳</div>
+                    </div>
+                </div>
+                <div class="combo-badge">COMBO <span id="combo-val">x1</span></div>
+            </aside>
+
+            <div class="game-area">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+
+            <aside class="panel-lateral right">
+                <div class="time-circle">
+                    <div class="inner-time" id="tiempo-circular">50s</div>
+                </div>
+                <div class="box-pro">
+                    <h3>ESTADÍSTICAS</h3>
+                    <p>Peces: <span id="stat-peces">0</span></p>
+                    <p>Dañados: <span id="stat-danio">0</span></p>
+                    <p>Mejor: <span>980</span></p>
+                </div>
+                <button class="btn-pausa-pro">PAUSA</button>
+            </aside>
         </div>
     </div>
 
