@@ -28,6 +28,7 @@ function resize() {
     bCanvas.width = window.innerWidth;
     bCanvas.height = window.innerHeight;
     if (juegoActivo) {
+        // Esto asegura que el canvas tome el tamaño del área de juego definida en CSS
         gCanvas.width = gCanvas.parentElement.clientWidth;
         gCanvas.height = gCanvas.parentElement.clientHeight;
     }
@@ -72,14 +73,14 @@ document.querySelector(".btn-pausa-pro").addEventListener("click", () => {
     btn.style.background = pausado ? "#00ffaa" : "#ff6600";
 });
 
-// Mouse
+// --- CONTROLES MOUSE ---
 gCanvas.addEventListener("mousemove", (e) => {
     const rect = gCanvas.getBoundingClientRect();
     depredador.x = e.clientX - rect.left;
     depredador.y = e.clientY - rect.top;
 });
 
-// Táctil (Añadido para celular)
+// --- CONTROLES TÁCTILES (CORREGIDO PARA MÓVIL) ---
 const handleTouch = (e) => {
     e.preventDefault();
     const rect = gCanvas.getBoundingClientRect();
