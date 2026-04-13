@@ -29,7 +29,6 @@ body, html {
     pointer-events: none; 
 }
 
-/* CENTRADO DEL MENÚ PRINCIPAL */
 .menu { 
     position: absolute; 
     width: 100%; 
@@ -47,7 +46,7 @@ body, html {
     align-items: center; 
     text-align: center;
     position: relative;
-    z-index: 110; /* Se asegura de estar por encima de los peces */
+    z-index: 110;
 }
 
 .logo-texto { 
@@ -73,7 +72,6 @@ body, html {
     transition: 0.2s; 
 }
 
-/* PECES DEL MENÚ (POSICIONES ORIGINALES) */
 .pez { 
     position: absolute; 
     z-index: 2; 
@@ -96,7 +94,6 @@ body, html {
 .pez-globo { bottom: 10%; left: 50%; transform: translateX(-50%); } 
 .pez-tortuga { bottom: 12%; right: 10%; }
 
-/* CONTENEDOR DE JUEGO */
 .game-container { 
     position: relative; 
     width: 90%; 
@@ -123,24 +120,9 @@ body, html {
     border-bottom: 2px solid rgba(255, 255, 255, 0.4); 
 }
 
-.stats { 
-    display: flex; 
-    gap: 25px; 
-    color: white; 
-    font-weight: bold; 
-}
-
-.stats span { 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-    font-size: 18px; 
-}
-
-.icon-mini { 
-    width: 22px; 
-    height: auto; 
-}
+.stats { display: flex; gap: 25px; color: white; font-weight: bold; }
+.stats span { display: flex; align-items: center; gap: 8px; font-size: 18px; }
+.icon-mini { width: 22px; height: auto; }
 
 .main-layout { 
     display: grid; 
@@ -154,29 +136,14 @@ body, html {
 .box-pro { 
     background: rgba(255, 255, 255, 0.15); 
     backdrop-filter: blur(20px); 
-    -webkit-backdrop-filter: blur(20px); 
     border: 2px solid rgba(255, 255, 255, 0.4); 
     border-radius: 25px; 
     padding: 20px; 
     color: white; 
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); 
 }
 
-.box-pro h3 { 
-    margin: 0 0 10px 0; 
-    font-size: 14px; 
-    color: #00ffff; 
-    text-align: center; 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
-    padding-bottom: 5px; 
-}
-
-.item-obj { 
-    display: flex; 
-    justify-content: space-between; 
-    margin-bottom: 8px; 
-    font-size: 14px; 
-}
+.box-pro h3 { margin: 0 0 10px 0; font-size: 14px; color: #00ffff; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 5px; }
+.item-obj { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
 
 .game-area { 
     background: rgba(255, 255, 255, 0.03); 
@@ -185,126 +152,49 @@ body, html {
     position: relative; 
     height: 100%; 
     border: 2px solid rgba(255, 255, 255, 0.4); 
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 255, 255, 0.1); 
 }
 
-#gameCanvas { 
-    width: 100%; 
-    height: 100%; 
-    cursor: none; 
-}
+#gameCanvas { width: 100%; height: 100%; cursor: none; }
+.btn-pausa-pro { background: rgba(0, 162, 255, 0.3); color: white; border: 2px solid rgba(255, 255, 255, 0.5); padding: 15px; border-radius: 20px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
 
-.btn-pausa-pro { 
-    background: rgba(0, 162, 255, 0.3); 
-    backdrop-filter: blur(10px); 
-    color: white; 
-    border: 2px solid rgba(255, 255, 255, 0.5); 
-    padding: 15px; 
-    border-radius: 20px; 
-    font-weight: bold; 
-    cursor: pointer; 
-    width: 100%; 
-    margin-top: 15px; 
-    transition: 0.3s ease; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
-}
+/* --- GAME OVER --- */
+.game-over-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 20, 40, 0.6); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+.game-over-card { width: 450px; background-color: #004d99; border: 3px solid rgba(255, 255, 255, 0.7); border-radius: 40px; padding: 40px; text-align: center; }
+.game-over-title { font-size: 55px; color: #ffeb3b; -webkit-text-stroke: 2px #d32f2f; }
+.game-over-body { background: #003366; border-radius: 20px; padding: 20px; margin-bottom: 30px; }
+.stat-line { display: flex; justify-content: space-between; align-items: center; color: white; font-size: 22px; font-weight: bold; padding: 10px 0; }
+.stat-value { color: #fff; font-size: 28px; }
+.separator { border: none; height: 1px; background: rgba(255,255,255,0.3); }
 
-/* --- ESTILOS GAME OVER (SEGÚN TU DISEÑO) --- */
-.game-over-overlay {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
-    background: rgba(0, 20, 40, 0.6); 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    z-index: 2000;
-}
+/* --- ESTA ES LA PARTE QUE ARREGLA EL PROBLEMA EN GITHUB/MÓVIL --- */
+@media (max-width: 900px) {
+    .logo-texto { font-size: 45px; -webkit-text-stroke: 5px white; }
+    .btn-inicio-pro { padding: 12px 40px; font-size: 20px; }
+    .pez { max-width: 70px; }
 
-.game-over-card {
-    width: 450px;
-    background-color: #004d99; 
-    border: 3px solid rgba(255, 255, 255, 0.7); 
-    border-radius: 40px;
-    padding: 40px;
-    position: relative;
-    text-align: center;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-}
+    .game-container { width: 98%; height: 98%; border-radius: 20px; }
+    .ui-header { padding: 0 15px; height: 60px; }
+    .logo-mini { font-size: 12px; }
+    .stats { gap: 10px; }
+    .stats span { font-size: 11px; gap: 4px; }
+    .icon-mini { width: 14px; }
 
-.game-over-title {
-    font-size: 55px;
-    color: #ffeb3b; 
-    margin: 0 0 30px 0;
-    -webkit-text-stroke: 2px #d32f2f; 
-    text-shadow: 0 4px 0 #b71c1c; 
-    font-family: 'Fredoka', sans-serif;
-}
+    .main-layout { 
+        display: flex; 
+        flex-direction: column; 
+        grid-template-columns: 1fr; 
+        padding: 10px;
+    }
 
-.game-over-body {
-    background: #003366; 
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 30px;
-}
-
-.stat-line {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    color: white; 
-    font-size: 22px; 
-    font-weight: bold;
-    padding: 10px 0;
-}
-
-.stat-value {
-    color: #fff; 
-    font-size: 28px;
-}
-
-.separator {
-    border: none; 
-    height: 1px; 
-    background: rgba(255,255,255,0.3);
-}
-
-.btn-reintentar-3d {
-    background: linear-gradient(#ff9800, #f57c00); 
-    border: none;
-    border-radius: 50px;
-    padding: 15px 40px;
-    color: white;
-    font-size: 26px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 6px 0 #e65100; 
-    transition: 0.1s;
-    width: 100%;
-}
-
-.btn-reintentar-3d:active {
-    transform: translateY(4px);
-    box-shadow: 0 2px 0 #e65100;
-}
-
-.decor-pez {
-    position: absolute;
-    width: 80px;
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
-}
-
-.pez-linterna {
-    top: -50px; 
-    left: -20px; 
-    transform: rotate(-10deg);
-}
-
-.pez-enojado {
-    top: -45px; 
-    right: -25px; 
-    transform: rotate(15deg);
+    .panel-lateral { width: 100%; order: 2; } /* Mueve los paneles abajo del juego */
+    .game-area { height: 50vh; order: 1; border-radius: 15px; } /* El juego arriba */
+    
+    .box-pro { padding: 10px; border-radius: 15px; margin-bottom: 5px; }
+    .box-pro h3 { font-size: 12px; margin-bottom: 5px; }
+    .item-obj { font-size: 11px; margin-bottom: 2px; }
+    
+    .game-over-card { width: 90%; padding: 20px; }
+    .game-over-title { font-size: 35px; }
+    .stat-line { font-size: 16px; }
+    .stat-value { font-size: 20px; }
 }
