@@ -62,6 +62,31 @@
         </div>
     </div>
 
+    <div id="game-over-screen" class="game-over-overlay" style="display: none;">
+        <div class="game-over-card glass-premium">
+            <div class="game-over-header">
+                <h2 class="game-over-title">GAME OVER</h2>
+            </div>
+            
+            <div class="game-over-body">
+                <div class="stat-line">
+                    <span>Puntaje Final</span>
+                    <span class="stat-value">⭐ <span id="final-puntos">0</span></span>
+                </div>
+                <hr class="separator">
+                <div class="stat-line">
+                    <span>Mejor Puntuación</span>
+                    <span class="stat-value">🏆 <span id="final-mejor">0</span></span>
+                </div>
+            </div>
+            
+            <div class="game-over-footer">
+                <button id="btn-reintentar" class="btn-pausa-pro btn-vidrio-action">REINTENTAR</button>
+                <button id="btn-volver-menu" class="btn-pausa-pro btn-vidrio-menu">MENÚ PRINCIPAL</button>
+            </div>
+        </div>
+    </div>
+
     <script src="assets/js/main.js"></script>
 </body>
 </html>
