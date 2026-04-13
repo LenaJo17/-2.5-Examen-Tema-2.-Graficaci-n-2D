@@ -4,18 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Fish Catcher</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="assets/img/peces.png">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <nav class="navbar navbar-dark fixed-top px-3 shadow">
+        <div class="container-fluid">
+            <span class="text-light d-none d-md-inline small">Materia: Gráficacion | Programador: Jolette Ochoa</span>
+        </div>
+    </nav>
+
     <img src="assets/img/fondo_arrecife.png" class="fondo">
     <canvas id="burbujas"></canvas>
 
+    <div id="panel-ayuda" class="panel-instrucciones-glass">
+        <h4 style="color: #00ffff; text-shadow: 0 0 10px rgba(0,255,255,0.5);">¿Cómo jugar?</h4>
+        <p class="small">Mueve el cursor o tu dedo para atrapar peces y sumar puntos.</p>
+        <hr style="border-color: rgba(255,255,255,0.3);">
+        <div class="d-flex flex-column gap-2 text-start small">
+            <span>✨ <strong>Dorado:</strong> 50 pts</span>
+            <span>🐟 <strong>Otros:</strong> 10 pts</span>
+            <span>🐡 <strong>Globo:</strong> Evítalos o pierdes vida</span>
+        </div>
+        <button class="btn btn-sm btn-outline-light mt-3 w-100" onclick="document.getElementById('panel-ayuda').classList.remove('active')">Cerrar</button>
+    </div>
+
     <div class="menu" id="menu-inicio">
-        <div class="ui-content">
+        <div class="ui-content text-center">
             <h1 class="logo-texto">Fish Catcher</h1>
-            <button id="btn-jugar" class="btn-inicio-pro">¡JUGAR!</button>
+            
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-3 mt-4">
+                <button id="btn-jugar" class="btn-inicio-pro">¡JUGAR!</button>
+                <button id="btn-ayuda" class="btn-instrucciones-vibrante">INSTRUCCIONES</button>
+            </div>
         </div>
         <img src="assets/img/dorado.png" class="pez pez-dorado">
         <img src="assets/img/azul.png" class="pez pez-azul">
@@ -25,8 +48,8 @@
         <img src="assets/img/tortuga.png" class="pez pez-tortuga">
     </div>
 
-    <div class="game-container" id="game-container">
-        <header class="ui-header">
+    <div class="container-fluid game-container" id="game-container" style="margin-top: 70px; margin-bottom: 60px;">
+        <header class="ui-header mb-3">
             <div class="logo-mini">FISH CATCHER</div>
             <div class="stats">
                 <span><img src="assets/img/azul.png" class="icon-mini"> Puntos: <strong id="puntos">0</strong></span>
@@ -46,7 +69,7 @@
                 </div>
             </aside>
 
-            <div class="game-area">
+            <div class="game-area shadow-lg">
                 <canvas id="gameCanvas"></canvas>
             </div>
 
@@ -62,24 +85,18 @@
         </div>
     </div>
 
+    <footer class="fixed-bottom text-white text-center py-2" style="z-index: 1000;">
+        <small>© 2026 - Universidad Instituto Tecnologico de Pachuca | Alumno: Jolette Ochoa | Fecha: 13/04/2026</small>
+    </footer>
+
     <div id="game-over-screen" class="game-over-overlay" style="display: none;">
         <div class="game-over-card glass-premium">
-            <div class="game-over-header">
-                <h2 class="game-over-title">GAME OVER</h2>
-            </div>
-            
+            <div class="game-over-header"><h2 class="game-over-title">GAME OVER</h2></div>
             <div class="game-over-body">
-                <div class="stat-line">
-                    <span>Puntaje Final</span>
-                    <span class="stat-value">⭐ <span id="final-puntos">0</span></span>
-                </div>
+                <div class="stat-line"><span>Puntaje Final</span><span class="stat-value">⭐ <span id="final-puntos">0</span></span></div>
                 <hr class="separator">
-                <div class="stat-line">
-                    <span>Mejor Puntuación</span>
-                    <span class="stat-value">🏆 <span id="final-mejor">0</span></span>
-                </div>
+                <div class="stat-line"><span>Mejor Puntuación</span><span class="stat-value">🏆 <span id="final-mejor">0</span></span></div>
             </div>
-            
             <div class="game-over-footer">
                 <button id="btn-reintentar" class="btn-pausa-pro btn-vidrio-action">REINTENTAR</button>
                 <button id="btn-volver-menu" class="btn-pausa-pro btn-vidrio-menu">MENÚ PRINCIPAL</button>
@@ -87,6 +104,15 @@
         </div>
     </div>
 
+    <script>
+        const btnAyuda = document.getElementById('btn-ayuda');
+        const panelAyuda = document.getElementById('panel-ayuda');
+        btnAyuda.onclick = (e) => {
+            e.stopPropagation();
+            panelAyuda.classList.toggle('active');
+        };
+        document.onclick = () => panelAyuda.classList.remove('active');
+    </script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>
